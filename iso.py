@@ -9,7 +9,7 @@ import urequests
 print("Versio=1")
 
 
-import time,machine
+import time,machine,sys
 
 from machine import TouchPad,Pin
 
@@ -32,13 +32,26 @@ def tats(x):
     time.sleep(0.03)
     return XT.read()< 45 
 
-if tats(3): exit
+if tats(15):
+    for x in range(21):
+        led2.value(x%2)
+        time.sleep(0.1)
+    sys.exit()
 
+from machine import WDT
+wdt=WDT(timeout=5000)
+
+def mysleep(x):
+    for y in range(5*x):
+        wdt.feed()
+        time.sleep(0.2)
+        
 def touch():
     led2.value(1)
     while True:
         if X0.read()<500: return 100
         for x in range(16):
+            wdt.feed()
             if tats(x):
                 led2.value(0)
                 cou=0
@@ -89,7 +102,7 @@ def send(x):
     for z in range(6):
         send2(x)
         time.sleep(0.01)
-    time.sleep(1)
+    mysleep(1)
 
 def urequ(x):
     led.value(1)
@@ -97,7 +110,6 @@ def urequ(x):
     try: urequests.get(x)
     except: pass
     led.value(0)
-
 
 def all_off():
     led2.value(0)
@@ -108,10 +120,13 @@ def all_off():
     urequ('http://192.168.1.64/5/off')
     urequ('http://192.168.1.62/5/off')
 
-            
+prevtu=200            
 def test():
+    global prevtu
     while True:
+        print('Main LOOP')
         for x in range(16):
+            wdt.feed()
             tu=touch()
             print(tu)
             if tu==0: send(2)
@@ -138,7 +153,7 @@ def test():
                     cou+=1
                 if cou>20: all_off()
             else: time.sleep(0.3)
-            if tu in range(20,50): time.sleep(2)
+            prevtu=tu
 test()
 
         
