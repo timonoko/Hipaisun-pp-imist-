@@ -1,20 +1,17 @@
 
-
 #import upip
 #upip.install('urequests')
-
 
 import urequests
 
 print("Versio=1")
 
-
 import time,machine,sys
 
 from machine import TouchPad,Pin
 
-outti=Pin(12,Pin.OUT)
 led=Pin(2,Pin.OUT)
+outti=Pin(12,Pin.OUT)
 led2=Pin(13,Pin.OUT)
 A=Pin(19,Pin.OUT)
 B=Pin(21,Pin.OUT)
@@ -23,6 +20,10 @@ D=Pin(23,Pin.OUT)
 
 XT=TouchPad(Pin(4))
 X0=TouchPad(Pin(14))
+X1=TouchPad(Pin(15))
+X2=TouchPad(Pin(27))
+X3=TouchPad(Pin(32))
+X4=TouchPad(Pin(33))
 
 def tats(x):
     A.value(x&1)
@@ -49,7 +50,6 @@ def mysleep(x):
 def touch():
     led2.value(1)
     while True:
-        if X0.read()<500: return 100
         for x in range(16):
             wdt.feed()
             if tats(x):
@@ -58,6 +58,16 @@ def touch():
                 while tats(x) and cou<32: cou+=1
                 if cou>30: return x+20
                 else: return x
+        for num in range(0,5):
+            x="X"+str(num)+".read()<500"
+            if eval(x): 
+                led2.value(0)
+                cou=0
+                while eval(x) and cou<11:
+                    time.sleep(0.1)
+                    cou+=1
+                if cou>10: return 120+num
+                else: return 100+num
 
                     
 NAPIT=[[7, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -137,8 +147,8 @@ def test():
             elif tu==22: send(5)
             elif tu>3 and tu<8: urequ('http://192.168.1.65/r%son'%(tu-3))
             elif tu>23 and tu<28: urequ('http://192.168.1.65/r%soff'%(tu-23)) 
-            elif tu>7 and tu<12: urequ('http://192.168.1.11:8083/ON%s'%(tu-7))
-            elif tu>27 and tu<32: urequ('http://192.168.1.11:8083/OFF%s'%(tu-27))
+            elif tu>7 and tu<10: urequ('http://192.168.1.11:8083/ON%s'%(tu-7))
+            elif tu>27 and tu<30: urequ('http://192.168.1.11:8083/OFF%s'%(tu-27))
             elif tu==12: urequ('http://192.168.1.64/5/on')
             elif tu==32: urequ('http://192.168.1.64/5/off')
             elif tu==13: urequ('http://192.168.1.62/5/on')
@@ -146,13 +156,13 @@ def test():
             elif tu==35:
                 led2.value(0)
                 machine.reset()
-            elif tu==100:
-                cou=0
-                while X0.read()<500 and cou<25:
-                    time.sleep(0.1)
-                    cou+=1
-                if cou>20: all_off()
-            else: time.sleep(0.3)
+            elif tu==120:  all_off()
+            elif tu in range(101,105): urequ('http://192.168.1.11:8083/ON%s'%(tu))
+            elif tu in range(121,125): urequ('http://192.168.1.11:8083/OFF%s'%(tu-20))
+            else:
+                    for x in range(11):
+                        led2.value(x%2)
+                        time.sleep(0.2)
             prevtu=tu
 test()
 
