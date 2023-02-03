@@ -78,12 +78,12 @@ try:
     datoja.urls+=('/ON{s1}','ON{s1}')
     class ON{s1}:
         def GET(self):
-            os.system('nappi{s1}on')
+            os.system('./nappi{s1}on')
             return palauta_html()
     datoja.urls+=('/OFF{s1}','OFF{s1}')
     class OFF{s1}:
         def GET(self):
-            os.system('nappi{s1}off')
+            os.system('./nappi{s1}off')
             return palauta_html()
 except:
     pass
