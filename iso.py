@@ -118,7 +118,10 @@ def urequ(x):
     led.value(1)
     print(x)
     try: urequests.get(x)
-    except: pass
+    except:
+        wdt.feed()
+        try: urequests.get(x)
+        except: pass
     led.value(0)
 
 def all_off():
@@ -127,6 +130,7 @@ def all_off():
     send(3)
     send(5)
     for x in range(4): urequ('http://192.168.1.65/r%soff'%(x+1))
+    for x in range(1,3): urequ('http://192.168.1.11:8083/OFF%s'%(x))
     urequ('http://192.168.1.64/5/off')
     urequ('http://192.168.1.62/5/off')
 
