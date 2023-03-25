@@ -4,7 +4,7 @@
 
 import urequests
 
-print("Versio=1")
+print("Versio=2")
 
 import time,machine,sys
 
@@ -17,6 +17,8 @@ A=Pin(19,Pin.OUT)
 B=Pin(21,Pin.OUT)
 C=Pin(22,Pin.OUT)
 D=Pin(23,Pin.OUT)
+
+Pir=Pin(18,Pin.IN)
 
 XT=TouchPad(Pin(4))
 X0=TouchPad(Pin(14))
@@ -39,15 +41,15 @@ if tats(15):
         time.sleep(0.1)
     sys.exit()
 
-from machine import WDT
-wdt=WDT(timeout=5000)
 
 def mysleep(x):
     for y in range(5*x):
         wdt.feed()
         time.sleep(0.2)
-        
+
 def touch():
+    pir_off=True
+    if Pir.value()==1: pir_off=False
     led2.value(1)
     while True:
         for x in range(16):
@@ -68,7 +70,11 @@ def touch():
                     cou+=1
                 if cou>10: return 120+num
                 else: return 100+num
-
+        if Pir.value()==1:
+            if pir_off:
+                led2.value(0)
+                return 105
+        else: pir_off=True
                     
 NAPIT=[[7, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
 [1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -134,8 +140,11 @@ def all_off():
     urequ('http://192.168.1.64/5/off')
     urequ('http://192.168.1.62/5/off')
 
+from machine import WDT
+wdt=WDT(timeout=5000)
+    
 prevtu=200            
-def test():
+def maini():
     global prevtu
     while True:
         print('Main LOOP')
@@ -161,13 +170,14 @@ def test():
                 led2.value(0)
                 machine.reset()
             elif tu==120:  all_off()
-            elif tu in range(101,105): urequ('http://192.168.1.11:8083/ON%s'%(tu))
+                # neljäs rivi välissä
+            elif tu in range(101,106): urequ('http://192.168.1.11:8083/ON%s'%(tu))
             elif tu in range(121,125): urequ('http://192.168.1.11:8083/OFF%s'%(tu-20))
             else:
                     for x in range(11):
                         led2.value(x%2)
                         time.sleep(0.2)
             prevtu=tu
-test()
+maini()
 
         
