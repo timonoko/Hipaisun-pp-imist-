@@ -9,3 +9,4 @@ Tämä ei vaadi ulkoista serveriä, sillä "urequests" näyttää sittenkin toim
 Tässä on myös 433 Megahertsin lähetin, jolloin myös 10 euron töpseleitä voi ohjata, eikä aina tarvi Wifiä.
 
 <img src=nappis.png>
+<img src=napi2.png>
