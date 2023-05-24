@@ -48,8 +48,33 @@ def mysleep(x):
         time.sleep(0.2)
 
 def touch():
+    led2.value(1)
+    while True:
+        for x in range(16):
+            wdt.feed()
+            if tats(x):
+                led2.value(0)
+                cou=0
+                while tats(x) and cou<32: cou+=1
+                if cou>30: return x+20
+                else: return x
+        for num in range(0,5):
+            x="X"+str(num)+".read()<500"
+            if eval(x): 
+                led2.value(0)
+                cou=0
+                while eval(x) and cou<11:
+                    time.sleep(0.1)
+                    cou+=1
+                if cou>10: return 120+num
+                else: return 100+num
+
+"""
+def touch():
     pir_off=True
-    if Pir.value()==1: pir_off=False
+    if Pir.value()==1:
+        led.value(1)
+        pir_off=False
     led2.value(1)
     while True:
         for x in range(16):
@@ -74,8 +99,10 @@ def touch():
             if pir_off:
                 led2.value(0)
                 return 105
-        else: pir_off=True
-                    
+        else:
+            led.value(0)
+            pir_off=True
+"""                    
 NAPIT=[[7, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
 [1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
 [2, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1],
