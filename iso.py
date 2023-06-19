@@ -204,6 +204,9 @@ def maini():
                     for x in range(11):
                         led2.value(x%2)
                         time.sleep(0.2)
+            if tu in range(20,35):
+                print('viive 3')
+                time.sleep(3)
             prevtu=tu
 maini()
 
