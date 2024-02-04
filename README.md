@@ -8,5 +8,8 @@ Tämä ei vaadi ulkoista serveriä, sillä "urequests" näyttää sittenkin toim
 
 Tässä on myös 433 Megahertsin lähetin, jolloin myös Lidlin 10 euron töpseleitä voi ohjata, eikä aina tarvi Wifiä.
 
-<img src=nappis.png>
+PIR-sensori lisätty, se sammuttaa turhat vehkeet jos liikettä ei ole havaittu tuntiin.
+
 <img src=napi2.png>
+<img src=nappis.png>
+
