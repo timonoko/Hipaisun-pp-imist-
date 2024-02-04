@@ -1,4 +1,4 @@
-Hipaisukaukosäädin
+Hipaisukaukosäädin ESP32
 
 Edellinen kaikensäädin oli hieman paska, kun näppäimet hajosivat. Prismassa oli
 kivoja krominastoja, joista tein 20 näpin säätimen, jossa näppäimiä luetaan etupäässä MC14067-analogiamuxin
