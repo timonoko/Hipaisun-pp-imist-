@@ -199,7 +199,6 @@ def all_off():
 
 def turhat_off():
     led2.value(0)
-    send(1)
     send(3)
     send(5)
     urequ('http://192.168.1.64/5/off')
