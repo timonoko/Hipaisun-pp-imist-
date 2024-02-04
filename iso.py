@@ -1,4 +1,31 @@
+"""
++-------+-------+-------+-------+
+|TIETO- |LAMPPU |LAMPPU |       |
+|KONE   |YLÄ    |KATTO  |       |
+|       |       |       |       |
++-------+-------+-------+-------+
+|4RELE  |4RELE  |4RELE  |4RELE  |
+|   1   |  2    |  3    |  4    |
+|       |       |       |       |
++-------+-------+-------+-------+
+|CLAS-  |CLAS-  |       |       |
+| RELE  | RELE  |       |       |
+|    1  |   2   |       |       |
++-------+-------+-------+-------+
+| CLAS- | CLAS- | YKSI  | MOVIE |
+| LAMPPU| LAMPPU| RUUTU |       |
+|    1  |   2   |       |       |
++-------+-------+-------+-------+
+| JUOTIN|TOKMANN|       |RESET/ |
+|       | RELE  |       |REPROGR|
+|       |       |       |       |
++-------+-------+-------+-------+
+        | ALL   |
+        | OFF   |
+        |       |
+        +-------+
 
+"""
 #import upip
 #upip.install('urequests')
 
@@ -46,7 +73,7 @@ def mysleep(x):
     for y in range(5*x):
         wdt.feed()
         time.sleep(0.2)
-
+"""
 def touch():
     led2.value(1)
     while True:
@@ -70,13 +97,17 @@ def touch():
                 else: return 100+num
 
 """
+
+WATCHDOG=0
+        
 def touch():
-    pir_off=True
-    if Pir.value()==1:
-        led.value(1)
-        pir_off=False
+    global WATCHDOG
     led2.value(1)
     while True:
+        WATCHDOG+=1
+        if WATCHDOG>3600:
+            WATCHDOG=0
+            return 7777
         for x in range(16):
             wdt.feed()
             if tats(x):
@@ -96,13 +127,12 @@ def touch():
                 if cou>10: return 120+num
                 else: return 100+num
         if Pir.value()==1:
-            if pir_off:
-                led2.value(0)
-                return 105
+            wdt.feed()
+            led2.value(0)
+            WATCHDOG=0
         else:
-            led.value(0)
-            pir_off=True
-"""                    
+            led2.value(1)
+                    
 NAPIT=[[7, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
 [1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
 [2, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -167,6 +197,13 @@ def all_off():
     urequ('http://192.168.1.64/5/off')
     urequ('http://192.168.1.62/5/off')
 
+def turhat_off():
+    led2.value(0)
+    send(1)
+    send(3)
+    send(5)
+    urequ('http://192.168.1.64/5/off')
+
 from machine import WDT
 wdt=WDT(timeout=5000)
     
@@ -197,6 +234,7 @@ def maini():
                 led2.value(0)
                 machine.reset()
             elif tu==120:  all_off()
+            elif tu==7777:  turhat_off()
                 # neljäs rivi välissä
             elif tu in range(101,106): urequ('http://192.168.1.11:8083/ON%s'%(tu))
             elif tu in range(121,125): urequ('http://192.168.1.11:8083/OFF%s'%(tu-20))
@@ -206,7 +244,7 @@ def maini():
                         time.sleep(0.2)
             if tu in range(20,35):
                 print('viive 3')
-                time.sleep(3)
+                time.sleep(2)  
             prevtu=tu
 maini()
 
