@@ -104,9 +104,11 @@ def touch():
     global WATCHDOG
     led2.value(1)
     while True:
-        WATCHDOG+=1
-        if WATCHDOG>3600:
+        WATCHDOG+=1 
+        if WATCHDOG>3600*3:
             WATCHDOG=0
+            return 1
+        if WATCHDOG>3600:
             return 7777
         for x in range(16):
             wdt.feed()
