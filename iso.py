@@ -16,9 +16,9 @@
 | LAMPPU| LAMPPU| RUUTU |       |
 |    1  |   2   |       |       |
 +-------+-------+-------+-------+
-| JUOTIN|TOKMANN|       |RESET/ |
-|       | RELE  |       |REPROGR|
-|       |       |       |       |
+| JUOTIN|TOKMANN|TOKMANN|RESET/ |
+|       | RELE  |  RELE |REPROGR|
+|       |  61   |   62  |       |
 +-------+-------+-------+-------+
         | ALL   |
         | OFF   |
@@ -106,9 +106,9 @@ def touch():
     led2.value(1)
     while True:
         WATCHDOG+=1 
-        if WATCHDOG>tunti*3:
-            WATCHDOG=0
-            return 20
+#        if WATCHDOG>tunti*3:
+#            WATCHDOG=0
+#            return 20
         if WATCHDOG==tunti:
             return 7777
         for x in range(16):
@@ -131,7 +131,7 @@ def touch():
                 else: return 100+num
         if Pir.value()==1:
             wdt.feed()
-#            led2.value(0)
+            led2.value(0)
             WATCHDOG=0
         else:
             led2.value(1)
@@ -198,6 +198,7 @@ def all_off():
     for x in range(4): urequ('http://192.168.1.65/r%soff'%(x+1))
     for x in range(1,3): urequ('http://192.168.1.11:8083/OFF%s'%(x))
     urequ('http://192.168.1.64/5/off')
+    urequ('http://192.168.1.61/5/off')
     urequ('http://192.168.1.62/5/off')
 
 def turhat_off():
@@ -230,8 +231,10 @@ def maini():
             elif tu>27 and tu<30: urequ('http://192.168.1.11:8083/OFF%s'%(tu-27))
             elif tu==12: urequ('http://192.168.1.64/5/on')
             elif tu==32: urequ('http://192.168.1.64/5/off')
-            elif tu==13: urequ('http://192.168.1.62/5/on')
-            elif tu==33: urequ('http://192.168.1.62/5/off')
+            elif tu==13: urequ('http://192.168.1.61/5/on')
+            elif tu==33: urequ('http://192.168.1.61/5/off')
+            elif tu==14: urequ('http://192.168.1.62/5/on')
+            elif tu==34: urequ('http://192.168.1.62/5/off')
             elif tu==35:
                 led2.value(0)
                 machine.reset()
