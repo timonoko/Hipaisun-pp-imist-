@@ -99,18 +99,16 @@ def touch():
 """
 
 WATCHDOG=0
-tunti=3600
+tunti=60
 
 def touch():
     global WATCHDOG
     led2.value(1)
     while True:
         WATCHDOG+=1 
-#        if WATCHDOG>tunti*3:
-#            WATCHDOG=0
-#            return 20
-        if WATCHDOG==tunti:
-            return 7777
+        if WATCHDOG>tunti:
+             WATCHDOG=0
+             return 7777
         for x in range(16):
             wdt.feed()
             if tats(x):
@@ -203,6 +201,7 @@ def all_off():
 
 def turhat_off():
     led2.value(0)
+    send(1)
     send(3)
     send(5)
     urequ('http://192.168.1.64/5/off')
