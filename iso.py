@@ -99,7 +99,7 @@ def touch():
 """
 
 WATCHDOG=0
-tunti=60
+tunti=3600
 
 def touch():
     global WATCHDOG
