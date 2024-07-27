@@ -106,9 +106,11 @@ def touch():
     led2.value(1)
     while True:
         WATCHDOG+=1 
-        if WATCHDOG>tunti:
-             WATCHDOG=0
-             return 7777
+        if WATCHDOG>24*tunti:
+            WATCHDOG=0
+            return 120
+        if WATCHDOG==tunti:
+            return 7777
         for x in range(16):
             wdt.feed()
             if tats(x):
