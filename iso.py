@@ -100,16 +100,21 @@ def touch():
 
 WATCHDOG=0
 tunti=3600
+pir_count=0
+no_pir=0
 
 def touch():
-    global WATCHDOG
+    global WATCHDOG,tunti,pir_count,no_pir
     led2.value(1)
+    pir_count=0
+    no_pir=0
     while True:
         WATCHDOG+=1 
+        print('WATCHDOG:',WATCHDOG)
         if WATCHDOG>24*tunti:
             WATCHDOG=0
             return 120
-        if WATCHDOG==tunti:
+        if WATCHDOG%tunti==0:
             return 7777
         for x in range(16):
             wdt.feed()
@@ -132,8 +137,21 @@ def touch():
         if Pir.value()==1:
             wdt.feed()
             led2.value(0)
-            WATCHDOG=0
+            time.sleep(0.005)
+            led2.value(1)
+            no_pir=0
+            if pir_count>10:
+                pir_count=0
+                WATCHDOG=0
+            else:
+                print('pir_count:',pir_count)
+                pir_count+=1
         else:
+            no_pir+=1
+            print('no_pir:',no_pir)
+            if no_pir>60:
+                pir_count=0
+                no_pir=0
             led2.value(1)
                     
 NAPIT=[[7, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
