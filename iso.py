@@ -136,11 +136,11 @@ def touch():
                 else: return 100+num
         if Pir.value()==1:
             wdt.feed()
-            led2.value(0)
-            time.sleep(0.005)
-            led2.value(1)
             no_pir=0
             if pir_count>10:
+                led2.value(0)
+                time.sleep(0.005)
+                led2.value(1)
                 pir_count=0
                 WATCHDOG=0
             else:
