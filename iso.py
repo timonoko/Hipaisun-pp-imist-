@@ -119,6 +119,7 @@ def touch():
         for x in range(16):
             wdt.feed()
             if tats(x):
+                WATCHDOG=0
                 led2.value(0)
                 cou=0
                 while tats(x) and cou<32: cou+=1
